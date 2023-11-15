@@ -62,6 +62,8 @@ def guisetup(stack):
 
     # Draw pancakes
     # ***ENTER CODE HERE*** (10 lines)
+
+    # Pancakes are currently uncolored!
     for i in range(1, n + 1):
         pan_wid = 30 * i
         pancake = Rectangle(
@@ -102,10 +104,13 @@ def flip(gui, stack, p):
 
     # Move pancakes around in the GUI
     # ***ENTER CODE HERE*** (5 lines)
-    # thickness = pancakes[0].config['width']  # may be a helpful variable :)
+    thickness = pancakes[0].p2.y - pancakes[0].p1.y  # may be a helpful variable :)
+    for i in range(0, p):
+        pancakes[stack[i]].move(0, (((p - 1) / 2) - i) * 2 * thickness)
 
     # Update the stack (which is separate from the graphics objects)
     # ***ENTER CODE HERE*** (2 lines)
+    stack[:p] = stack[:p][::-1]
 
     return stack
 
