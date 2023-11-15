@@ -24,11 +24,14 @@ def main(args):
     # Parse inputs
     n = args.num  # number of pancakes
     stack = list(range(n))
-    if args.seed is not None:  # randomly shuffle the pancakes initially
-        random.shuffle(stack)
 
     # Make the graphical user interface
     gui = guisetup(stack)
+    if args.seed is not None:  # randomly shuffle the pancakes initially
+        for action in str(args.seed):
+            time.sleep(1)
+            flip(gui, stack, int(action))
+    path = ""
 
     # Use the graphical user interface
     while True:
@@ -44,6 +47,17 @@ def main(args):
                 str(i) for i in range(1, n + 1)
             ]:  # manually flip some of the pancakes
                 flip(gui, stack, int(key))
+            elif key == "Return":
+                for action in path:
+                    time.sleep(1)
+                    flip(gui, stack, int(action))
+            elif key == "r":
+                gui.close()
+                stack = list(range(n))
+                if args.seed is not None:  # randomly shuffle the pancakes initially
+                    random.shuffle(stack)
+                gui = guisetup(stack)
+                path = ""
 
     gui.close()
 
@@ -74,12 +88,19 @@ def guisetup(stack):
 
     # Add text objects for instructions and status updates
     instructions = Text(
-        Point(10, hei - 12),
-        "Press a # to flip pancakes, 'g' to run GBFS, Escape to quit",
+        Point(10, hei - 24),
+        "Press a # to flip pancakes, 'g' to run GBFS, 'r' to reset,",
     )
     instructions._reconfig("anchor", "w")
     instructions.setSize(8)
     instructions.draw(gui)
+    instructions2 = Text(
+        Point(10, hei - 12),
+        "Return to run the GBFS solution, Escape to quit",
+    )
+    instructions2._reconfig("anchor", "w")
+    instructions2.setSize(8)
+    instructions2.draw(gui)
 
     status = Text(Point(cx, 20), "")
     status._reconfig("anchor", "center")
@@ -159,7 +180,9 @@ def gbfs(gui, stack):
 
     print(f"searched {cnt} paths")
     print("solution:", solution)
-    status.setText("...search is complete")
+    status.setText("...search is complete (press Return to run solution)")
+
+    return solution
 
 
 def simulate(stack, path):
