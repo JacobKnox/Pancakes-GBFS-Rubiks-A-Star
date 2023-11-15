@@ -138,9 +138,23 @@ def gbfs(gui, stack):
 
     # ***MODIFY CODE HERE*** (20-25 lines)
     cnt = 0
+    pq = PriorityQueue()
+    pq.put((cost(stack), ""))
+    solution = []
+    while not pq.empty():
+        node = pq.get()
+        temp_stack = simulate(stack, node[1])
+        print(f"Looking at path {node[1]}")
+        cnt += 1
+        if cost(temp_stack) == 0:
+            solution = node[1]
+            break
+        for i in range(2, len(pancakes) + 1):
+            if node[1] == "" or node[1][-1] != str(i):
+                pq.put((cost(simulate(temp_stack, str(i))), node[1] + str(i)))
 
     print(f"searched {cnt} paths")
-    print("solution:", "")
+    print("solution:", solution)
     status.setText("...search is complete")
 
 
@@ -150,11 +164,12 @@ def simulate(stack, path):
     for action in path:
         try:
             p = int(action)  # how many pancakes are we trying to flip?
-            for i in range(1, p // 2 + 1):
-                fakestack[-i], fakestack[-(p - i + 1)] = (
-                    fakestack[-(p - i + 1)],
-                    fakestack[-i],
-                )
+            fakestack[:p] = fakestack[:p][::-1]
+            # for i in range(1, p // 2 + 1):
+            #     fakestack[-i], fakestack[-(p - i + 1)] = (
+            #         fakestack[-(p - i + 1)],
+            #         fakestack[-i],
+            #     )
         except:
             print("INVALID ACTION: Check code")
 
