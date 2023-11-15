@@ -119,7 +119,7 @@ def cost(stack):
     """Compute the cost h(stack) for a given stack of pancakes.
     Here, we define cost as the number of pancakes in the wrong position."""
     # ***MODIFY CODE HERE*** (2 lines)
-    h = 0
+    h = sum([(stack[i] != i) for i in range(0, len(stack))])
     return h
 
 
