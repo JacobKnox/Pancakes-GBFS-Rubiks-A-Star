@@ -3,7 +3,7 @@
 
 import argparse
 from graphics import *
-from matplotlib import cm
+from matplotlib import cm, colors
 import pdb
 from queue import PriorityQueue
 import random
@@ -26,11 +26,10 @@ def main(args):
     stack = list(range(n))
 
     # Make the graphical user interface
-    gui = guisetup(stack)
     if args.seed is not None:  # randomly shuffle the pancakes initially
-        for action in str(args.seed):
-            time.sleep(1)
-            flip(gui, stack, int(action))
+        random.seed(args.seed)
+        random.shuffle(stack)
+    gui = guisetup(stack)
     path = ""
 
     # Use the graphical user interface
@@ -77,13 +76,14 @@ def guisetup(stack):
     # Draw pancakes
     # ***ENTER CODE HERE*** (10 lines)
 
-    # Pancakes are currently uncolored!
-    for i in range(1, n + 1):
-        pan_wid = 30 * i
+    for i in range(0, n):
+        pan = stack[i]
+        pan_wid = 30 * (pan + 1)
         pancake = Rectangle(
             Point(cx - (pan_wid / 2), margin + (thickness * (i - 1))),
             Point(cx + (pan_wid / 2), margin + (thickness * i)),
         )
+        pancake.setFill(colors.to_hex(cmap(pan / n)))
         pancake.draw(gui)
 
     # Add text objects for instructions and status updates
@@ -117,7 +117,7 @@ def flip(gui, stack, p):
 
     # Get graphics objects from GUI
     obj = gui.items
-    pancakes = obj[:-2]
+    pancakes = obj[:-3]
     status = obj[-1]
 
     # Update status text on GUI
@@ -127,7 +127,9 @@ def flip(gui, stack, p):
     # ***ENTER CODE HERE*** (5 lines)
     thickness = pancakes[0].p2.y - pancakes[0].p1.y  # may be a helpful variable :)
     for i in range(0, p):
-        pancakes[stack[i]].move(0, (((p - 1) / 2) - i) * 2 * thickness)
+        for pancake in pancakes:
+            if (pancake.p2.x - pancake.p1.x) // 30 == (stack[i] + 1):
+                pancake.move(0, (((p - 1) / 2) - i) * 2 * thickness)
 
     # Update the stack (which is separate from the graphics objects)
     # ***ENTER CODE HERE*** (2 lines)
