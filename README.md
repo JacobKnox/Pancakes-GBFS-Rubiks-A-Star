@@ -1,1 +1,2 @@
-# Homework-3
+# Greedy Best First Search and A* Search
+Solutions to Homework 3 for Introduction to Artificial Intelligence. Given starter code and instructions (csc3510_hw3_f23.pdf), pancakes.py implements GBFS to solve the Gates pancake flipping problem and rubiks.py implements A* search to solve a rubiks cube. The pancakes_bonus.py and rubiks_bonus.py are essentially the same as the other files, but with additions required for bonus credit (specified in the instructions).
